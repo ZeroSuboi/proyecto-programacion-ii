@@ -1,0 +1,17 @@
+# Seguridad y Configuración
+.env
+
+# Dependencias
+node_modules/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs de errores
+*.log
+npm-debug.log*
+
+# Configuraciones del editor
+.vscode/
+.idea/
