@@ -1,6 +1,6 @@
 -- 1. Crear la base de datos si no existe
-CREATE DATABASE IF NOT EXISTS agro_venezuela;
-USE agro_venezuela;
+CREATE DATABASE IF NOT EXISTS proyecto_agricola;
+USE proyecto_agricola;
 
 -- 2. Tabla de Usuarios (Credenciales y Roles)
 CREATE TABLE IF NOT EXISTS usuarios (
