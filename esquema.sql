@@ -2,42 +2,37 @@
 CREATE DATABASE IF NOT EXISTS proyecto_agricola;
 USE proyecto_agricola;
 
--- 2. Tabla de Usuarios (Credenciales y Roles)
+-- 1. CREAR LA TABLA DE USUARIOS
+-- Guarda las credenciales de los productores con contraseñas encriptadas
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('admin', 'productor') DEFAULT 'productor',
+    rol VARCHAR(50) DEFAULT 'productor',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+);
 
--- 3. Tabla de Productores (Datos Personales)
-CREATE TABLE IF NOT EXISTS productores (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    nombre_completo VARCHAR(150) NOT NULL,
-    cedula VARCHAR(20) NOT NULL UNIQUE,
-    telefono VARCHAR(20) NOT NULL,
-    estado VARCHAR(50) NOT NULL, -- Aquí se guardará el estado de Venezuela
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- 4. Tabla de Fincas / Predios
+-- 2. CREAR LA TABLA DE FINCAS
+-- Vincula cada finca directamente con el ID del productor que la registró
 CREATE TABLE IF NOT EXISTS fincas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    productor_id INT NOT NULL,
-    nombre_finca VARCHAR(150) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    ubicacion VARCHAR(255) NOT NULL,
     hectareas DECIMAL(10, 2) NOT NULL,
-    municipio VARCHAR(100) NOT NULL,
-    rubro_principal VARCHAR(100) NOT NULL, -- Ejemplo: Ganadería, Maíz, Café, etc.
+    usuario_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (productor_id) REFERENCES productores(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
--- 5. Insertar un Administrador por defecto (Opcional, para pruebas iniciales)
--- Nota: En producción, la contraseña deberías encriptarla con bcrypt. 
--- Esto es solo para que tengas una cuenta admin inicial (Contraseña propuesta: admin123)
-INSERT INTO usuarios (email, password, rol) 
-VALUES ('admin@agro.com', '$2b$10$EfxmC5.7dafHn1reEJDgOe1bXJc15M6Z7yP4m4Hj.6dFw80Z4zSvi', 'admin')
-ON DUPLICATE KEY UPDATE email=email;
+-- 3. CREAR LA TABLA DE LOGOS (Para la función avanzada de marca)
+-- Almacena la ruta de la imagen del logo y el estado de su análisis de plagio
+CREATE TABLE IF NOT EXISTS logos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    ruta_imagen VARCHAR(255) NOT NULL,
+    hash_perceptual VARCHAR(64) NOT NULL, 
+    porcentaje_similitud DECIMAL(5, 2) DEFAULT 0.00,
+    estado_analisis VARCHAR(50) DEFAULT 'pendiente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);

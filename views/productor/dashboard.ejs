@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel del Productor - Gestión de Fincas</title>
+</head>
+<body>
+    <h2>¡Bienvenido al Panel de Control, <%= user.email %>!</h2>
+    <p>Rol: <strong><%= user.rol %></strong></p>
+    
+    <hr>
+    
+    <h3>🏡 Gestión de Fincas</h3>
+    <ul>
+        <li><a href="/fincas/nueva">Registrar una Nueva Finca</a></li>
+        <li><a href="#">Mis Fincas Registradas</a></li>
+        <li><a href="#">Reportes de Producción por Finca</a></li>
+    </ul>
+
+    <hr>
+
+    <h3>🎨 Identidad de Marca y Logotipo</h3>
+    <p>Sube el logo de tu marca productora para analizar si es original o si tiene similitudes con marcas ya existentes en el sistema.</p>
+    
+    <form action="/productor/analizar-logo" method="POST" enctype="multipart/form-data">
+        <label>Selecciona la imagen de tu logo:</label><br><br>
+        <input type="file" name="logo" accept="image/*" required><br><br>
+        <button type="submit">Subir y Analizar Similitud</button>
+    </form>
+
+    <hr>
+    <br>
+    <a href="/auth/logout">Cerrar Sesión Segura</a>
+</body>
+</html>
