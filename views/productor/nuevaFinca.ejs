@@ -1,61 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Nueva Finca</title>
-</head>
-<body>
-    <h2>🏡 Registrar una Nueva Finca</h2>
-    <p>Productor activo: <strong><%= user.email %></strong></p>
-    
-    <hr>
+<%- include('../partials/header', { title: 'Registrar Nueva Finca - AgroMarca' }) %>
 
-    <form action="/fincas/nueva" method="POST">
+<div style="max-width: 600px; margin: 2rem auto;">
+    <div class="card">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">🏡 Registrar Nueva Finca</h2>
+        <p class="text-center" style="color: var(--text-muted); margin-bottom: 2rem;">Añade un nuevo terreno productor para el control de marcas y cosechas.</p>
         
-        <div>
-            <label for="nombre">Nombre de la Finca:</label><br>
-            <input 
-                type="text" 
-                id="nombre" 
-                name="nombre" 
-                placeholder="Ej. Finca La Esperanza" 
-                required
-            >
+        <form action="/fincas/nueva" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre de la Finca:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej. Finca La Esperanza" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ubicacion">Ubicación / Dirección:</label>
+                <input type="text" id="ubicacion" name="ubicacion" class="form-control" placeholder="Ej. Sector El Limón, Lote 4" required>
+            </div>
+
+            <div class="form-group">
+                <label for="hectareas">Tamaño en Hectáreas:</label>
+                <input type="number" id="hectareas" name="hectareas" class="form-control" step="0.01" min="0.01" placeholder="Ej. 12.50" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Guardar Finca</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="/dashboard" style="color: var(--text-muted); font-weight: 500;">← Volver al Panel de Control</a>
         </div>
-        <br>
+    </div>
+</div>
 
-        <div>
-            <label for="ubicacion">Ubicación / Dirección:</label><br>
-            <input 
-                type="text" 
-                id="ubicacion" 
-                name="ubicacion" 
-                placeholder="Ej. Sector El Limón, Lote 4" 
-                required
-            >
-        </div>
-        <br>
-
-        <div>
-            <label for="hectareas">Tamaño en Hectáreas:</label><br>
-            <input 
-                type="number" 
-                id="hectareas" 
-                name="hectareas" 
-                step="0.01" 
-                min="0.01" 
-                placeholder="Ej. 12.50" 
-                required
-            >
-        </div>
-        <br>
-
-        <button type="submit">Guardar Finca</button>
-    </form>
-
-    <br>
-    <hr>
-    <a href="/dashboard">⬅️ Volver al Panel de Control</a>
-</body>
-</html>
+<%- include('../partials/footer') %>

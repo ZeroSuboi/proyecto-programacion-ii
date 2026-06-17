@@ -101,12 +101,12 @@ const logoController = {
                         'Archivo físico rechazado eliminado con éxito.'
                     );
                 }
-                return res.send(`<h3>Análisis completado de forma local</h3>
-                      <p>Tu Hash generado: <strong>${hashReal}</strong></p>
-                      <p>Mayor similitud con otras marcas: <strong>${mayorSimilitudEncontrada.toFixed(2)}%</strong></p>
-                      <p>Estado de tu logo: <strong>${estado}</strong></p>
-                      <p>Resultado: No aprobado</p>
-                      <br><a href="/dashboard">Volver al Dashboard</a>`);
+                return res.render('productor/resultadoAnalisis', {
+                    user: req.session.user,
+                    hashReal: hashReal,
+                    mayorSimilitudEncontrada: mayorSimilitudEncontrada,
+                    estado: estado
+                });
             }
 
             // 3. 🛡️ VALIDACIÓN DE REEMPLAZO PROTEGIDA
@@ -150,13 +150,12 @@ const logoController = {
                 estado
             );
 
-            // Respuesta temporal del análisis
-            res.send(`<h3>Análisis completado de forma local (Arquitectura corregida)</h3>
-                      <p>Tu Hash generado: <strong>${hashReal}</strong></p>
-                      <p>Mayor similitud con otras marcas: <strong>${mayorSimilitudEncontrada.toFixed(2)}%</strong></p>
-                      <p>Estado de tu logo: <strong>${estado}</strong></p>
-                      <p>Resultado: Aprobado</p>
-                      <br><a href="/dashboard">Volver al Dashboard</a>`);
+            res.render('productor/resultadoAnalisis', {
+                user: req.session.user,
+                hashReal: hashReal,
+                mayorSimilitudEncontrada: mayorSimilitudEncontrada,
+                estado: estado
+            });
         } catch (error) {
             console.error(error);
             res.status(500).send(

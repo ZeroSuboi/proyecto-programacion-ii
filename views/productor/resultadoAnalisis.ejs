@@ -1,0 +1,59 @@
+<%- include('../partials/header', { title: 'Resultado del Análisis - AgroMarca' }) %>
+
+<div style="max-width: 600px; margin: 2rem auto;">
+    <% 
+        let isAprobado = estado === 'aprobado';
+        let statusClass = isAprobado ? 'success' : 'danger';
+    %>
+
+    <div class="card text-center" style="border-top: 4px solid <%= isAprobado ? '#10b981' : '#ef4444' %>;">
+        
+        <div style="margin-bottom: 2rem;">
+            <div style="font-size: 4rem; line-height: 1;">
+                <%= isAprobado ? '✅' : '❌' %>
+            </div>
+            <h2 style="margin-top: 1rem;"><%= isAprobado ? 'Logotipo Aprobado' : 'Logotipo Rechazado' %></h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                <%= isAprobado 
+                    ? 'Tu identidad de marca ha sido registrada y protegida localmente.' 
+                    : 'Se ha detectado una alta similitud con otras marcas de la región.' 
+                %>
+            </p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.02); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left; margin-bottom: 2rem;">
+            
+            <div class="form-group" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.85rem; display: block; text-transform: uppercase;">Estado del Análisis</span>
+                <span class="badge badge-<%= statusClass %>" style="margin-top: 0.25rem;">
+                    <%= isAprobado ? 'Original' : 'Riesgo de Plagio' %>
+                </span>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <span style="color: var(--text-muted); font-size: 0.85rem; display: block; text-transform: uppercase;">Huella Digital (dHash Hex)</span>
+                <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--primary); font-family: monospace; display: inline-block; margin-top: 0.25rem; word-break: break-all;">
+                    <%= hashReal %>
+                </code>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <span style="color: var(--text-muted); font-size: 0.85rem; display: block; text-transform: uppercase;">Similitud Máxima Detectada</span>
+                <span style="font-size: 1.2rem; font-weight: 700; color: <%= isAprobado ? 'var(--primary)' : 'var(--danger)' %>; display: block; margin-top: 0.25rem;">
+                    <%= mayorSimilitudEncontrada.toFixed(2) %>%
+                </span>
+            </div>
+
+        </div>
+
+        <% if (!isAprobado) { %>
+            <div class="alert alert-warning" style="margin-bottom: 2rem; font-size: 0.9rem; text-align: left;">
+                ℹ️ Para proteger la originalidad de las marcas de la región, el archivo cargado ha sido eliminado de forma segura del servidor. Por favor, realiza ajustes en tu diseño y vuelve a intentarlo.
+            </div>
+        <% } %>
+
+        <a href="/dashboard" class="btn btn-primary">Volver al Dashboard</a>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

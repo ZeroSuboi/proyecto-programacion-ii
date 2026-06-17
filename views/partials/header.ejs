@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'AgroMarca - Panel de Control' %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <% if (typeof user !== 'undefined' && user) { %>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="/dashboard" class="logo-brand">
+                🌱 Agro<span>Marca</span>
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-btn">Dashboard</a>
+                <a href="/fincas" class="nav-btn">Fincas</a>
+                <a href="/auth/logout" class="nav-btn nav-btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+    <% } else { %>
+    <nav class="navbar">
+        <div class="navbar-inner" style="justify-content: center;">
+            <div class="logo-brand">
+                🌱 Agro<span>Marca</span>
+            </a>
+        </div>
+    </nav>
+    <% } %>
+    <main class="container">

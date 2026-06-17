@@ -1,7 +1,7 @@
 const Logo = require('../models/logoModel');
 const Finca = require('../models/fincaModel');
 const Usuario = require('../models/userModel');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const productorController = {
     mostrarDashboard: async (req, res) => {

@@ -1,45 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis Fincas Registradas</title>
-</head>
-<body>
-    <h2>🏡 Mis Fincas Registradas</h2>
-    <p>Productor: <strong><%= user.email %></strong></p>
-    <hr>
+<%- include('../partials/header', { title: 'Mis Fincas - AgroMarca' }) %>
 
-    <a href="/fincas/nueva">+ Registrar otra Finca</a> | 
-    <a href="/dashboard">Volver al Panel Principal</a>
-    <br><br>
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+            <h2>🏡 Mis Fincas Registradas</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Productor: <strong><%= user.email %></strong></p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="/fincas/nueva" class="btn btn-primary" style="width: auto; padding: 0.5rem 1rem;">+ Registrar Finca</a>
+            <a href="/dashboard" class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem;">Volver al Panel</a>
+        </div>
+    </div>
 
     <% if (fincas.length === 0) { %>
-        <p><em>Aún no has registrado ninguna finca en el sistema.</em></p>
+        <div class="alert alert-warning" style="margin: 2rem 0;">
+            ⚠️ Aún no has registrado ninguna finca en el sistema.
+        </div>
     <% } else { %>
-        <table border="1" cellpadding="8" style="border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th>Nombre de la Finca</th>
-                    <th>Ubicación</th>
-                    <th>Tamaño (Hectáreas)</th>
-                    <th>Fecha de Registro</th>
-                    <th>Acciones</th> </tr>
-            </thead>
-            <tbody>
-                <% fincas.forEach(finca => { %>
+        <div class="table-wrapper">
+            <table>
+                <thead>
                     <tr>
-                        <td><strong><%= finca.nombre %></strong></td>
-                        <td><%= finca.ubicacion %></td>
-                        <td><%= finca.hectareas %> ha</td>
-                        <td><%= new Date(finca.created_at).toLocaleDateString('es-ES') %></td>
-                        <td>
-                            <a href="/fincas/editar/<%= finca.id %>" style="color: blue; margin-right: 10px;">✏️ Editar</a>
-                            <a href="/fincas/eliminar/<%= finca.id %>" style="color: red;" onclick="return confirm('¿Seguro que deseas eliminar esta finca?')">❌ Eliminar</a>
-                        </td>
+                        <th>Nombre de la Finca</th>
+                        <th>Ubicación</th>
+                        <th>Tamaño (Hectáreas)</th>
+                        <th>Fecha de Registro</th>
+                        <th style="text-align: right;">Acciones</th>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% fincas.forEach(finca => { %>
+                        <tr>
+                            <td><strong><%= finca.nombre %></strong></td>
+                            <td><%= finca.ubicacion %></td>
+                            <td>
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: var(--primary); border: 1px solid rgba(16,185,129,0.2);">
+                                    <%= finca.hectareas %> ha
+                                </span>
+                            </td>
+                            <td><%= new Date(finca.created_at).toLocaleDateString('es-ES') %></td>
+                            <td style="text-align: right;">
+                                <a href="/fincas/editar/<%= finca.id %>" class="btn btn-secondary" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.85rem; margin-right: 0.5rem; display: inline-block;">
+                                    ✏️ Editar
+                                </a>
+                                <a href="/fincas/eliminar/<%= finca.id %>" class="btn" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); display: inline-block;" onclick="return confirm('¿Seguro que deseas eliminar esta finca?')">
+                                    ❌ Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
     <% } %>
-</body>
-</html>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,59 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Finca</title>
-</head>
-<body>
-    <h2>✏️ Editar Finca</h2>
-    <p>Modificando la propiedad de: <strong><%= user.email %></strong></p>
-    <hr>
+<%- include('../partials/header', { title: 'Editar Finca - AgroMarca' }) %>
 
-    <form action="/fincas/editar/<%= finca.id %>" method="POST">
+<div style="max-width: 600px; margin: 2rem auto;">
+    <div class="card">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">✏️ Editar Finca</h2>
+        <p class="text-center" style="color: var(--text-muted); margin-bottom: 2rem;">Modificando los datos de la propiedad asociada a <strong><%= user.email %></strong></p>
         
-        <div>
-            <label for="nombre">Nombre de la Finca:</label><br>
-            <input 
-                type="text" 
-                id="nombre" 
-                name="nombre" 
-                value="<%= finca.nombre %>" 
-                required
-            >
+        <form action="/fincas/editar/<%= finca.id %>" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre de la Finca:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="<%= finca.nombre %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ubicacion">Ubicación / Dirección:</label>
+                <input type="text" id="ubicacion" name="ubicacion" class="form-control" value="<%= finca.ubicacion %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="hectareas">Tamaño en Hectáreas:</label>
+                <input type="number" id="hectareas" name="hectareas" class="form-control" step="0.01" min="0.01" value="<%= finca.hectareas %>" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Guardar Cambios</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="/fincas" style="color: var(--text-muted); font-weight: 500;">← Cancelar y Volver al Listado</a>
         </div>
-        <br>
+    </div>
+</div>
 
-        <div>
-            <label for="ubicacion">Ubicación / Dirección:</label><br>
-            <input 
-                type="text" 
-                id="ubicacion" 
-                name="ubicacion" 
-                value="<%= finca.ubicacion %>" 
-                required
-            >
-        </div>
-        <br>
-
-        <div>
-            <label for="hectareas">Tamaño en Hectáreas:</label><br>
-            <input 
-                type="number" 
-                id="hectareas" 
-                name="hectareas" 
-                step="0.01" 
-                min="0.01" 
-                value="<%= finca.hectareas %>" 
-                required
-            >
-        </div>
-        <br>
-
-        <button type="submit">Guardar Cambios</button>
-    </form>
-
-    <br>
-    <hr>
-    <a href="/fincas">⬅️ Cancelar y Volver al Listado</a>
-</body>
-</html>
+<%- include('../partials/footer') %>

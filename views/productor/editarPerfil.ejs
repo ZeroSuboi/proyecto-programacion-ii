@@ -1,28 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificar Cuenta - Productor</title>
-</head>
-<body style="font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; padding: 0 20px; line-height: 1.6;">
+<%- include('../partials/header', { title: 'Modificar Cuenta - AgroMarca' }) %>
 
-    <h2>📝 Actualizar Credenciales de Cuenta</h2>
-    <p>Modifica el correo electrónico asociado a tu acceso de productor.</p>
-    <hr>
-
-    <form action="/perfil/editar" method="POST" style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #ddd;">
+<div style="max-width: 500px; margin: 2rem auto;">
+    <div class="card">
+        <h2 class="text-center" style="margin-bottom: 0.5rem;">📝 Actualizar Perfil</h2>
+        <p class="text-center" style="color: var(--text-muted); margin-bottom: 2rem;">Modifica el correo electrónico asociado a tu acceso de productor.</p>
         
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Correo Electrónico de Acceso:</label>
-            <input type="email" name="email" value="<%= user.email %>" required placeholder="ejemplo@correo.com" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        <form action="/perfil/editar" method="POST">
+            <div class="form-group">
+                <label for="email">Correo electrónico de acceso:</label>
+                <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" required placeholder="nombre@correo.com">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Guardar Nuevo Correo</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="/dashboard" style="color: var(--text-muted); font-weight: 500;">← Cancelar y Volver al Dashboard</a>
         </div>
+    </div>
+</div>
 
-        <button type="submit" style="background-color: #0066cc; color: white; border: none; padding: 10px 15px; font-size: 1em; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Guardar Nuevo Correo</button>
-    </form>
-
-    <br>
-    <a href="/dashboard" style="color: #6c757d; text-decoration: none; font-weight: bold;">← Volver al Panel de Control</a>
-
-</body>
-</html>
+<%- include('../partials/footer') %>
