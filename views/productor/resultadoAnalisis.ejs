@@ -46,6 +46,40 @@
 
         </div>
 
+        <% if (locals.logoMasParecido && logoMasParecido) { %>
+            <div style="margin-bottom: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--text-color); text-align: left;">Comparación Lado a Lado</h3>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                    
+                    <!-- Logo Subido -->
+                    <div style="flex: 1; min-width: 150px; background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
+                        <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; margin-top: 0;">Tu Logo</h4>
+                        <div style="width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); border-radius: var(--radius-sm); overflow: hidden; border: 1px dashed var(--border-color);">
+                            <% if (isAprobado && locals.rutaImagen) { %>
+                                <img src="<%= rutaImagen %>" alt="Tu Logo Aprobado" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            <% } else if (locals.imagenRechazadaBase64) { %>
+                                <img src="<%= imagenRechazadaBase64 %>" alt="Tu Logo Rechazado" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            <% } else { %>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">No disponible</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Logo Similar Registrado -->
+                    <div style="flex: 1; min-width: 150px; background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
+                        <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; margin-top: 0;">Logo Registrado Similar</h4>
+                        <div style="width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); border-radius: var(--radius-sm); overflow: hidden; border: 1px dashed var(--border-color);">
+                            <img src="<%= logoMasParecido.ruta_imagen %>" alt="Logo Similar" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--danger); font-weight: 600;">
+                            <%= mayorSimilitudEncontrada.toFixed(2) %>% de similitud
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        <% } %>
+
         <% if (!isAprobado) { %>
             <div class="alert alert-warning" style="margin-bottom: 2rem; font-size: 0.9rem; text-align: left;">
                 ℹ️ Para proteger la originalidad de las marcas de la región, el archivo cargado ha sido eliminado de forma segura del servidor. Por favor, realiza ajustes en tu diseño y vuelve a intentarlo.

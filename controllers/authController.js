@@ -8,18 +8,18 @@ const authController = {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
-                return res.send('Rellena todos los campos para continuar');
+                return res.send("<script>alert('Rellena todos los campos para continuar'); window.history.back();</script>");
             }
             const usuarioExistente = await Usuario.buscarPorEmail(email);
             if (usuarioExistente) {
-                return res.send('Este correo ya esta en uso');
+                return res.send("<script>alert('Este correo ya está en uso'); window.history.back();</script>");
             }
             const hashedPassword = await bcrypt.hash(password, 10);
             await Usuario.crear(email, hashedPassword, 'productor');
             res.redirect('/dashboard');
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error interno del servidor');
+            res.status(500).send("<script>alert('Error interno del servidor'); window.history.back();</script>");
         }
     },
 
@@ -27,18 +27,18 @@ const authController = {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
-                return res.send('Rellena todos los campos para continuar');
+                return res.send("<script>alert('Rellena todos los campos para continuar'); window.history.back();</script>");
             }
             const usuario = await Usuario.buscarPorEmail(email);
             if (!usuario) {
-                return res.send('Este usuario no existe');
+                return res.send("<script>alert('Este usuario no existe'); window.history.back();</script>");
             }
             const passwordCorrecta = await bcrypt.compare(
                 password,
                 usuario.password
             );
             if (!passwordCorrecta) {
-                return res.send('Contraseña incorrecta!');
+                return res.send("<script>alert('Contraseña incorrecta!'); window.history.back();</script>");
             }
             req.session.user = {
                 id: usuario.id,

@@ -13,7 +13,7 @@ const fincaController = {
 
             if (!nombre || !ubicacion || !hectareas) {
                 return res.send(
-                    'Por favor, rellena todos los campos de la finca.'
+                    "<script>alert('Por favor, rellena todos los campos de la finca.'); window.history.back();</script>"
                 );
             }
 
@@ -22,7 +22,7 @@ const fincaController = {
             res.redirect('/fincas');
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error interno al registrar la finca');
+            res.status(500).send("<script>alert('Error interno al registrar la finca'); window.history.back();</script>");
         }
     },
 
@@ -31,8 +31,8 @@ const fincaController = {
         try {
             const usuario_id = req.session.user.id;
             const fincas = await Finca.obtenerPorUsuario(usuario_id);
-            if (!fincas) {
-                return res.send('No posees fincas para visualizar');
+            if (!fincas || fincas.length === 0) {
+                return res.send("<script>alert('No posees fincas para visualizar'); window.location.href='/dashboard';</script>");
             }
             res.render('productor/misFincas', {
                 user: req.session.user,
@@ -40,7 +40,7 @@ const fincaController = {
             });
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error interno al buscar las fincas');
+            res.status(500).send("<script>alert('Error interno al buscar las fincas'); window.history.back();</script>");
         }
     },
 
@@ -54,7 +54,7 @@ const fincaController = {
             if (!finca || finca.usuario_id !== req.session.user.id) {
                 return res
                     .status(403)
-                    .send('No tienes permiso para editar esta finca.');
+                    .send("<script>alert('No tienes permiso para editar esta finca.'); window.location.href='/fincas';</script>");
             }
 
             res.render('productor/editarFinca', {
@@ -63,7 +63,7 @@ const fincaController = {
             });
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error al cargar la edición de la finca');
+            res.status(500).send("<script>alert('Error al cargar la edición de la finca'); window.history.back();</script>");
         }
     },
 
@@ -79,14 +79,14 @@ const fincaController = {
                 !fincaOriginal ||
                 fincaOriginal.usuario_id !== req.session.user.id
             ) {
-                return res.status(403).send('Acción no autorizada.');
+                return res.status(403).send("<script>alert('Acción no autorizada.'); window.location.href='/fincas';</script>");
             }
 
             await Finca.actualizar(fincaId, nombre, ubicacion, hectareas);
             res.redirect('/fincas');
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error al actualizar la finca');
+            res.status(500).send("<script>alert('Error al actualizar la finca'); window.history.back();</script>");
         }
     },
 
@@ -98,7 +98,7 @@ const fincaController = {
             // Validación de propiedad
             const finca = await Finca.obtenerPorId(fincaId);
             if (!finca || finca.usuario_id !== req.session.user.id) {
-                return res.status(403).send('Acción no autorizada.');
+                return res.status(403).send("<script>alert('Acción no autorizada.'); window.location.href='/fincas';</script>");
             }
 
             await Finca.eliminar(fincaId);

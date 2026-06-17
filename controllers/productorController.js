@@ -81,13 +81,12 @@ const productorController = {
                 return res
                     .status(400)
                     .send(
-                        '<h3>Error:</h3><p>Las contraseñas escritas no coinciden.</p><br><a href="/perfil/password">Volver a intentar</a>'
+                        "<script>alert('Las contraseñas escritas no coinciden.'); window.history.back();</script>"
                     );
             }
 
             // 2. Encriptamos la nueva contraseña antes de tocar la BD
-            const salt = await bcrypt.genSalt(10);
-            const passwordEncriptada = await bcrypt.hash(nuevaPassword, salt);
+            const passwordEncriptada = await bcrypt.hash(nuevaPassword, 10);
 
             // 3. Guardamos el Hash resultante en MySQL
             await Usuario.actualizarPassword(usuario_id, passwordEncriptada);

@@ -44,18 +44,18 @@ const logoController = {
                     return res
                         .status(400)
                         .send(
-                            '<h3>Error:</h3><p>El archivo es demasiado pesado. El límite máximo permitido es de 2MB.</p><br><a href="/dashboard">Volver a intentar</a>'
+                            "<script>alert('El archivo es demasiado pesado. El límite máximo permitido es de 2MB.'); window.history.back();</script>"
                         );
                 }
                 // Cualquier otro error de filtro de formato
                 return res
                     .status(400)
-                    .send(`Error al subir el archivo: ${err.message}`);
+                    .send(`<script>alert('Error al subir el archivo: ${err.message}'); window.history.back();</script>`);
             }
             if (!req.file)
                 return res
                     .status(400)
-                    .send('Por favor, selecciona una imagen.');
+                    .send("<script>alert('Por favor, selecciona una imagen.'); window.history.back();</script>");
             next();
         });
     },
@@ -80,6 +80,7 @@ const logoController = {
 
             let mayorSimilitudEncontrada = 0;
             let estado = 'aprobado';
+            let logoMasParecido = null;
 
             // 3. Comparar las huellas en memoria
             for (const otroLogo of logosExistentes) {
@@ -89,13 +90,22 @@ const logoController = {
                 );
                 if (similitud > mayorSimilitudEncontrada) {
                     mayorSimilitudEncontrada = similitud;
+                    logoMasParecido = otroLogo;
                 }
             }
 
             // Umbral del 85% para determinar copia
             if (mayorSimilitudEncontrada >= 85.0) {
                 estado = 'plagio_detectado';
+                let imagenRechazadaBase64 = '';
                 if (fs.existsSync(rutaFisicaArchivo)) {
+                    try {
+                        const fileData = fs.readFileSync(rutaFisicaArchivo);
+                        const ext = path.extname(req.file.filename).substring(1);
+                        imagenRechazadaBase64 = `data:image/${ext};base64,${fileData.toString('base64')}`;
+                    } catch (readError) {
+                        console.error('Error al leer el archivo para base64:', readError);
+                    }
                     fs.unlinkSync(rutaFisicaArchivo); // Borra el archivo del disco
                     console.log(
                         'Archivo físico rechazado eliminado con éxito.'
@@ -105,7 +115,10 @@ const logoController = {
                     user: req.session.user,
                     hashReal: hashReal,
                     mayorSimilitudEncontrada: mayorSimilitudEncontrada,
-                    estado: estado
+                    estado: estado,
+                    logoMasParecido: logoMasParecido,
+                    imagenRechazadaBase64: imagenRechazadaBase64,
+                    rutaImagen: null
                 });
             }
 
@@ -154,7 +167,10 @@ const logoController = {
                 user: req.session.user,
                 hashReal: hashReal,
                 mayorSimilitudEncontrada: mayorSimilitudEncontrada,
-                estado: estado
+                estado: estado,
+                logoMasParecido: logoMasParecido,
+                imagenRechazadaBase64: null,
+                rutaImagen: rutaImagenParaBD
             });
         } catch (error) {
             console.error(error);
