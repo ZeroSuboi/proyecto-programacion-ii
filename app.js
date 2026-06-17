@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 5000
 // Configuraciones de vistas
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Configuraciones de peticiones
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Finca</title>
+</head>
+<body>
+    <h2>✏️ Editar Finca</h2>
+    <p>Modificando la propiedad de: <strong><%= user.email %></strong></p>
+    <hr>
+
+    <form action="/fincas/editar/<%= finca.id %>" method="POST">
+        
+        <div>
+            <label for="nombre">Nombre de la Finca:</label><br>
+            <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                value="<%= finca.nombre %>" 
+                required
+            >
+        </div>
+        <br>
+
+        <div>
+            <label for="ubicacion">Ubicación / Dirección:</label><br>
+            <input 
+                type="text" 
+                id="ubicacion" 
+                name="ubicacion" 
+                value="<%= finca.ubicacion %>" 
+                required
+            >
+        </div>
+        <br>
+
+        <div>
+            <label for="hectareas">Tamaño en Hectáreas:</label><br>
+            <input 
+                type="number" 
+                id="hectareas" 
+                name="hectareas" 
+                step="0.01" 
+                min="0.01" 
+                value="<%= finca.hectareas %>" 
+                required
+            >
+        </div>
+        <br>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <br>
+    <hr>
+    <a href="/fincas">⬅️ Cancelar y Volver al Listado</a>
+</body>
+</html>

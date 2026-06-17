@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Fincas Registradas</title>
+</head>
+<body>
+    <h2>🏡 Mis Fincas Registradas</h2>
+    <p>Productor: <strong><%= user.email %></strong></p>
+    <hr>
+
+    <a href="/fincas/nueva">+ Registrar otra Finca</a> | 
+    <a href="/dashboard">Volver al Panel Principal</a>
+    <br><br>
+
+    <% if (fincas.length === 0) { %>
+        <p><em>Aún no has registrado ninguna finca en el sistema.</em></p>
+    <% } else { %>
+        <table border="1" cellpadding="8" style="border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th>Nombre de la Finca</th>
+                    <th>Ubicación</th>
+                    <th>Tamaño (Hectáreas)</th>
+                    <th>Fecha de Registro</th>
+                    <th>Acciones</th> </tr>
+            </thead>
+            <tbody>
+                <% fincas.forEach(finca => { %>
+                    <tr>
+                        <td><strong><%= finca.nombre %></strong></td>
+                        <td><%= finca.ubicacion %></td>
+                        <td><%= finca.hectareas %> ha</td>
+                        <td><%= new Date(finca.created_at).toLocaleDateString('es-ES') %></td>
+                        <td>
+                            <a href="/fincas/editar/<%= finca.id %>" style="color: blue; margin-right: 10px;">✏️ Editar</a>
+                            <a href="/fincas/eliminar/<%= finca.id %>" style="color: red;" onclick="return confirm('¿Seguro que deseas eliminar esta finca?')">❌ Eliminar</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+</body>
+</html>

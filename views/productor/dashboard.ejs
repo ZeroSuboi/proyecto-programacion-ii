@@ -2,34 +2,151 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel del Productor - Gestión de Fincas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Productor - Dashboard</title>
 </head>
-<body>
+<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6;">
+
     <h2>¡Bienvenido al Panel de Control, <%= user.email %>!</h2>
-    <p>Rol: <strong><%= user.rol %></strong></p>
+    <p>Rol del sistema: <strong><%= user.rol %></strong></p>
+    <p>⚙️ <a href="/perfil/editar" style="color: #0066cc; font-weight: bold; text-decoration: none;">Modificar correo de la cuenta</a></p>
+    <p>🔒 <a href="/perfil/password" style="color: #0066cc; font-weight: bold; text-decoration: none;">Cambiar contraseña de seguridad</a></p>
     
-    <hr>
+    <div style="display: flex; gap: 20px; margin: 25px 0;">
+        
+        <div style="flex: 1; background-color: #e8f0fe; border: 1px solid #aecbfa; padding: 15px; border-radius: 8px;">
+            <h4 style="margin: 0; color: #1a73e8;">🏡 Terrenos en Control</h4>
+            <p style="font-size: 2em; font-weight: bold; margin: 10px 0 5px 0;"><%= totalFincas %></p>
+            <span style="font-size: 0.85em; color: #5f6368;">Fincas nativas bajo tu propiedad</span>
+        </div>
+
+        <% 
+            let bgCard = '#fef7e0'; 
+            let borderCard = '#fadea6';
+            let titleColor = '#b06000';
+
+            if (miLogo) {
+                if (miLogo.estado_analisis === 'aprobado') {
+                    bgCard = '#e6f4ea'; borderCard = '#a8dab5'; titleColor = '#137333';
+                } else if (miLogo.estado_analisis === 'plagio_detectado') {
+                    bgCard = '#fce8e6'; borderCard = '#f5c2c7'; titleColor = '#c5221f';
+                }
+            }
+        %>
+        
+        <div style="flex: 1; padding: 15px; border-radius: 8px; border: 1px solid <%= borderCard %>; background-color: <%= bgCard %>;">
+            <h4 style="margin: 0; color: <%= titleColor %>;">🎨 Estatus de Identidad</h4>
+            
+            <p style="font-size: 1.2em; font-weight: bold; margin: 15px 0 5px 0;">
+                <% if (!miLogo) { %>
+                    Sin Registrar
+                <% } else if (miLogo.estado_analisis === 'aprobado') { %>
+                    Protegida (Original)
+                <% } else { %>
+                    Riesgo de Copia
+                <% } %>
+            </p>
+            <span style="font-size: 0.85em; color: #5f6368;">Análisis matemático dHash local</span>
+        </div>
+
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
     
-    <h3>🏡 Gestión de Fincas</h3>
+    <% if (alerta === 'exito') { %>
+        <div style="color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 12px; margin-bottom: 20px; border-radius: 5px;">
+            <strong>¡Análisis completado!</strong> Tu logotipo ha sido procesado de forma local y el inventario de marcas se ha actualizado.
+        </div>
+    <% } %>
+
+    <% if (alerta === 'actualizado') { %>
+        <div style="color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 12px; margin-bottom: 20px; border-radius: 5px;">
+            <strong>¡Cuenta actualizada!</strong> El correo electrónico de acceso se ha modificado correctamente en la base de datos.
+        </div>
+    <% } %>
+
+    <% if (alerta === 'password_cambiada') { %>
+        <div style="color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 12px; margin-bottom: 20px; border-radius: 5px;">
+            <strong>¡Seguridad actualizada!</strong> Tu contraseña ha sido cambiada y encriptada de forma segura.
+        </div>
+    <% } %>
+
+    <h3>🏡 Gestión de Fincas Nativas</h3>
+    <p>Administra los terrenos asociados a tu cuenta de productor para el control de cosechas.</p>
     <ul>
-        <li><a href="/fincas/nueva">Registrar una Nueva Finca</a></li>
-        <li><a href="#">Mis Fincas Registradas</a></li>
-        <li><a href="#">Reportes de Producción por Finca</a></li>
+        <li><a href="/fincas/nueva" style="color: #0066cc; text-decoration: none; font-weight: bold;">+ Registrar una Nueva Finca</a></li>
+        <li><a href="/fincas" style="color: #0066cc; text-decoration: none; font-weight: bold;">Mis Fincas Registradas (Editar / Eliminar)</a></li>
     </ul>
 
-    <hr>
+    <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
 
     <h3>🎨 Identidad de Marca y Logotipo</h3>
-    <p>Sube el logo de tu marca productora para analizar si es original o si tiene similitudes con marcas ya existentes en el sistema.</p>
-    
-    <form action="/productor/analizar-logo" method="POST" enctype="multipart/form-data">
-        <label>Selecciona la imagen de tu logo:</label><br><br>
-        <input type="file" name="logo" accept="image/*" required><br><br>
-        <button type="submit">Subir y Analizar Similitud</button>
+
+    <% if (miLogo) { %>
+        <div style="margin-bottom: 25px; padding: 20px; border: 1px solid #ddd; display: inline-block; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h4 style="margin-top: 0;">Tu Logotipo de Marca Actual:</h4>
+            
+            <img src="<%= miLogo.ruta_imagen %>" alt="Logo de la marca" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 15px; border: 1px solid #ccc; background-color: #fff; padding: 5px; border-radius: 4px;">
+            
+            <p style="margin: 5px 0; font-size: 0.9em;">Huella Digital (dHash Hex): <code><%= miLogo.hash_perceptual %></code></p>
+            <p style="margin: 5px 0;">Similitud con marcas rivales: <strong><%= miLogo.porcentaje_similitud ? Number(miLogo.porcentaje_similitud).toFixed(2) : '0.00' %>%</strong></p>
+            
+            <p style="margin: 15px 0 0 0;">Estado de Originalidad: 
+                <% if (miLogo.estado_analisis === 'aprobado') { %>
+                    <span style="color: #155724; font-weight: bold; background-color: #d4edda; padding: 4px 10px; border-radius: 4px; border: 1px solid #c3e6cb;">✅ MARCA CONFIGURADA</span>
+                <% } else if (miLogo.estado_analisis === 'plagio_detectado') { %>
+                    <span style="color: #721c24; font-weight: bold; background-color: #f8d7da; padding: 4px 10px; border-radius: 4px; border: 1px solid #f5c6cb;">⚠️ ALTA SIMILITUD DETECTADA</span>
+                <% } else { %>
+                    <span> No hay un logo cargado </span>
+                <% } %>
+            </p>
+        </div>
+        <p style="color: #555; font-style: italic;">¿Deseas actualizar tu marca? Sube un nuevo archivo de imagen abajo y el sistema reemplazará automáticamente el anterior.</p>
+    <% } else { %>
+        <div style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 12px; margin-bottom: 20px; border-radius: 5px;">
+            ⚠️ Aún no has registrado ningún logotipo para proteger tu identidad de marca en la región.
+        </div>
+    <% } %>
+
+    <form id="formLogo" action="/productor/analizar-logo" method="POST" enctype="multipart/form-data" style="background-color: #f1f3f5; padding: 20px; border-radius: 6px;">
+        <label style="font-weight: bold; display: block; margin-bottom: 8px;">Selecciona la imagen de tu logo (.png, .jpg, .jpeg):</label>
+        <input type="file" id="inputLogo" name="logo" accept="image/*" required style="display: block; margin-bottom: 15px;">
+        
+        <p id="errorFrontend" style="color: red; font-weight: bold; display: none; margin-top: 0; margin-bottom: 15px;"></p>
+        
+        <button type="submit" id="btnSubir" style="background-color: #28a745; color: white; border: none; padding: 10px 15px; font-size: 1em; border-radius: 4px; cursor: pointer; font-weight: bold;">Subir y Analizar Similitud</button>
     </form>
 
-    <hr>
+    <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px 0;">
+    
     <br>
-    <a href="/auth/logout">Cerrar Sesión Segura</a>
+    <a href="/auth/logout" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔒 Cerrar Sesión Segura</a>
+
+    <script>
+        const inputLogo = document.getElementById('inputLogo');
+        const errorFrontend = document.getElementById('errorFrontend');
+        const btnSubir = document.getElementById('btnSubir');
+
+        inputLogo.addEventListener('change', function() {
+            const archivo = this.files[0];
+            
+            if (archivo) {
+                const limiteMaximoBytes = 2 * 1024 * 1024; // 2MB
+                
+                if (archivo.size > limiteMaximoBytes) {
+                    errorFrontend.textContent = "❌ El archivo supera el límite de 2MB. Por favor, elige una imagen más ligera.";
+                    errorFrontend.style.display = "block";
+                    btnSubir.disabled = true;
+                    btnSubir.style.backgroundColor = "#6c757d";
+                    btnSubir.style.cursor = "not-allowed";
+                } else {
+                    errorFrontend.style.display = "none";
+                    btnSubir.disabled = false;
+                    btnSubir.style.backgroundColor = "#28a745";
+                    btnSubir.style.cursor = "pointer";
+                }
+            }
+        });
+    </script>
 </body>
 </html>

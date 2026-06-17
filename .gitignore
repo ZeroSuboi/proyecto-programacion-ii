@@ -15,3 +15,6 @@ npm-debug.log*
 # Configuraciones del editor
 .vscode/
 .idea/
+
+uploads/*
+!uploads/.gitkeep
